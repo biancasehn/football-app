@@ -1,0 +1,22 @@
+.breadcrumb {
+    display: flex;
+    gap: 1em;
+    padding: 1em;
+    margin-left: 5em;
+}
+
+@media (max-width: 768px) {
+    .breadcrumb {
+        margin-left: 0;
+        justify-content: center;
+    }
+}
+
+.link {
+    color: #04647c;
+    font-weight: bold;
+}
+
+.nonLink {
+    color: #757575;
+}
