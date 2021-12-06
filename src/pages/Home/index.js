@@ -1,30 +1,42 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { updateErrorMessage } from "../../actions";
 import Loading from "../../components/Loading";
 import styles from "./home.module.css";
 
 function Home() {
   const [competitionsList, setCompetitionsList] = useState([]);
 
+  const dispatch = useDispatch();
+  const errorMessage = useSelector((state) => state.errorMessage);
+
   useEffect(() => {
     function fetchAPI() {
-    console.log("entrou na fetch api")
-
       fetch("https://api.football-data.org/v2/competitions/?plan=TIER_ONE", {
         method: "get",
         headers: { "X-Auth-Token": process.env.REACT_APP_API_TOKEN },
       })
         .then((response) => response.json())
-        .then((json) => setCompetitionsList(json.competitions))
-        .catch(() => setTimeout(() => fetchAPI(), 5000));
+        .then((json) => {
+          dispatch(updateErrorMessage(false));
+          setCompetitionsList(json.competitions);
+        })
+        .catch((err) => {
+          if ((err = "TypeError: Failed to fetch")) {
+            dispatch(updateErrorMessage(true));
+            setTimeout(() => fetchAPI(), 5000);
+          }
+        });
     }
-    console.log("depois")
+
     fetchAPI();
   }, [setCompetitionsList]);
 
   return (
     <div className="container">
       <h1>Football Competitions</h1>
+      {errorMessage === true && <p>Too many requests. Fetching API...</p>}
       {competitionsList.length === 0 ? (
         <Loading />
       ) : (

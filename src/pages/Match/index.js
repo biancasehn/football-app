@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateMatchSelected } from "../../actions";
+import { updateMatchSelected, updateErrorMessage } from "../../actions";
 import Breadcrumb from "../../components/Breadcrumb";
 import Loading from "../../components/Loading";
 import styles from "./match.module.css";
@@ -10,11 +10,10 @@ function Match() {
   const params = useParams();
   const matchId = params.matchId;
 
-  const [errorMessage, setErrorMessage] = useState(false);
-
   const dispatch = useDispatch();
   const competitionDetails = useSelector((state) => state.competitionSelected);
   const matchDetails = useSelector((state) => state.matchSelected);
+  const errorMessage = useSelector((state) => state.errorMessage);
 
   useEffect(() => {
     function fetchAPI() {
@@ -24,13 +23,13 @@ function Match() {
       })
         .then((resp) => resp.json())
         .then((json) => {
-          setErrorMessage(false)
+          dispatch(updateErrorMessage(false));
           dispatch(updateMatchSelected(json));
         })
         .catch((err) => {
-          if ((err = "TypeError: Failed to fetch")) {
+          if (err = "TypeError: Failed to fetch") {
             setTimeout(() => fetchAPI(), 5000);
-            return setErrorMessage(true);
+            dispatch(updateErrorMessage(true));
           }
         });
     }

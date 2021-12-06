@@ -11,3 +11,10 @@ export const updateMatchSelected = (match) => {
         payload: match,
     };
 }
+
+export const updateErrorMessage = (status) => {
+    return {
+        type: 'UPDATE_ERROR_MESSAGE',
+        payload: status,
+    };
+}

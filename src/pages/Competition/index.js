@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateCompetitionSelected } from "../../actions";
+import { updateCompetitionSelected, updateErrorMessage } from "../../actions";
 import Breadcrumb from "../../components/Breadcrumb";
 import Loading from "../../components/Loading";
 import styles from "./competition.module.css";
@@ -14,6 +14,7 @@ function Competition() {
 
   const dispatch = useDispatch();
   const competitionDetails = useSelector((state) => state.competitionSelected);
+  const errorMessage = useSelector((state) => state.errorMessage);
 
   useEffect(() => {
     function fetchAPI() {
@@ -26,18 +27,25 @@ function Competition() {
       )
         .then((resp) => resp.json())
         .then((json) => {
+          dispatch(updateErrorMessage(false));
           setMatchesList(json.matches);
           dispatch(updateCompetitionSelected(json.competition));
         })
-        .catch(() => setTimeout(() => fetchAPI(), 5000));
+        .catch((err) => {
+          if (err = "TypeError: Failed to fetch") {
+            dispatch(updateErrorMessage(true));
+            setTimeout(() => fetchAPI(), 5000);
+          }
+        });
     }
     fetchAPI();
-  }, [dispatch]);
+  }, [setMatchesList]);
 
   return (
     <div>
       <Breadcrumb />
       <div className="container">
+        {errorMessage === true && <p>Too many requests. Fetching API...</p>}
         {matchesList?.length === 0 ? (
           <Loading />
         ) : (
