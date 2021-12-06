@@ -1,7 +1,7 @@
-.list {
-    display:flex;
+.listItem {
+    display:grid;
+    grid-template-columns: 1fr 20% 25%;
     align-items:center;
-    justify-content: space-between;
 }
 
 .match {

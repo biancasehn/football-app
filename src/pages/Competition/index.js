@@ -9,7 +9,7 @@ import styles from "./competition.module.css";
 function Competition() {
   const params = useParams();
   const competitionCode = params.competitionCode;
-  
+
   const [matchesList, setMatchesList] = useState([]);
 
   const dispatch = useDispatch();
@@ -29,18 +29,20 @@ function Competition() {
         .then((resp) => resp.json())
         .then((json) => {
           dispatch(updateErrorMessage(false));
-          setMatchesList(json.matches);
+          setMatchesList(
+            json.matches.filter((match) => match.status !== "FINISHED")
+          );
           dispatch(updateCompetitionSelected(json.competition));
         })
         .catch((err) => {
           if ((err = "TypeError: Failed to fetch")) {
             dispatch(updateErrorMessage(true));
-            setTimeout(() => fetchAPI(), 5000);
+            setTimeout(() => fetchAPI(), 20000);
           }
         });
     }
     fetchAPI();
-  }, [setMatchesList]);
+  }, [dispatch]);
 
   return (
     <div>
@@ -54,20 +56,22 @@ function Competition() {
             <h1>{competitionDetails.name}</h1>
             <div className="main">
               {matchesList?.map((match) => (
-                <div className={styles.list} key={match.id}>
+                <div className={styles.listItem} key={match.id}>
                   <Link to={`/${competitionDetails.code}/${match.id}`}>
-                    <div
-                      className={styles.match}
-                    >{`${match.awayTeam.name} X ${match.homeTeam.name}`}</div>
+                    <div className={styles.match}>
+                      {`${match.awayTeam.name} X ${match.homeTeam.name}`}
+                    </div>
                   </Link>
-                  <div
-                    style={{
-                      fontWeight: "bold",
-                      color: match.status === "IN_PLAY" ? "green" : "gray",
-                    }}
-                  >
-                    {match.status}
-                  </div>
+                  {match.status === "IN_PLAY" ? (
+                    <div style={{ fontWeight: "bold", color: "green" }}>
+                      IN PLAY
+                    </div>
+                  ) : (
+                    <>
+                      <div style={{ color: "gray" }}>{match.status}</div>
+                      <div>{String(new Date(match.utcDate)).slice(0, 15)}</div>
+                    </>
+                  )}
                 </div>
               ))}
             </div>
