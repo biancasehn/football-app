@@ -16,6 +16,7 @@ function Match() {
   const errorMessage = useSelector((state) => state.errorMessage);
 
   useEffect(() => {
+    dispatch(updateErrorMessage(false));
     function fetchAPI() {
       fetch(`https://api.football-data.org/v2/matches/${matchId}`, {
         method: "GET",
@@ -27,7 +28,7 @@ function Match() {
           dispatch(updateMatchSelected(json));
         })
         .catch((err) => {
-          if (err = "TypeError: Failed to fetch") {
+          if ((err = "TypeError: Failed to fetch")) {
             setTimeout(() => fetchAPI(), 5000);
             dispatch(updateErrorMessage(true));
           }

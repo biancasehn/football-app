@@ -1,24 +1,23 @@
 import { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useParams, Link } from "react-router-dom";
 import styles from "./breadcrumb.module.css";
 
 function Breadcrumb() {
-  const location = useLocation();
-  const competitionCode = useSelector(
-    (state) => state.competitionSelected.code
-  );
+  const params = useParams();
 
-  const [pathName, setPathName] = useState("");
+  const [competitionCode, setCompetitionCode] = useState("");
+  const [matchId, setMatchId] = useState("");
+
   useEffect(() => {
-    setPathName(location.pathname);
-  }, [location]);
+    setCompetitionCode(params.competitionCode);
+    setMatchId(params.matchId);
+  }, [params]);
 
   return (
     <div className={styles.breadcrumb}>
       <Link to="/"><span className={styles.link}>Home</span></Link>
       <span> > </span>
-      {pathName.split("/").length < 3 ? (
+      {matchId === undefined ? (
         <span className={styles.nonLink}>League</span>
       ) : (
         <>

@@ -12,6 +12,7 @@ function Home() {
   const errorMessage = useSelector((state) => state.errorMessage);
 
   useEffect(() => {
+    dispatch(updateErrorMessage(false));
     function fetchAPI() {
       fetch("https://api.football-data.org/v2/competitions/?plan=TIER_ONE", {
         method: "get",
@@ -24,8 +25,8 @@ function Home() {
         })
         .catch((err) => {
           if ((err = "TypeError: Failed to fetch")) {
-            dispatch(updateErrorMessage(true));
             setTimeout(() => fetchAPI(), 5000);
+            dispatch(updateErrorMessage(true));
           }
         });
     }

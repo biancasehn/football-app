@@ -9,7 +9,7 @@ import styles from "./competition.module.css";
 function Competition() {
   const params = useParams();
   const competitionCode = params.competitionCode;
-
+  
   const [matchesList, setMatchesList] = useState([]);
 
   const dispatch = useDispatch();
@@ -17,6 +17,7 @@ function Competition() {
   const errorMessage = useSelector((state) => state.errorMessage);
 
   useEffect(() => {
+    dispatch(updateErrorMessage(false));
     function fetchAPI() {
       fetch(
         `https://api.football-data.org/v2/competitions/${competitionCode}/matches`,
@@ -32,7 +33,7 @@ function Competition() {
           dispatch(updateCompetitionSelected(json.competition));
         })
         .catch((err) => {
-          if (err = "TypeError: Failed to fetch") {
+          if ((err = "TypeError: Failed to fetch")) {
             dispatch(updateErrorMessage(true));
             setTimeout(() => fetchAPI(), 5000);
           }
