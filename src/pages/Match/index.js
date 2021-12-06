@@ -45,18 +45,22 @@ function Match() {
               style={{ justifyContent: "flex-end" }}
             >
               <h2>{`${matchDetails?.head2head?.homeTeam.name}`}</h2>
-              <h2
-                className={styles.goals}
-              >{`${matchDetails?.match?.score?.fullTime?.homeTeam}`}</h2>
+              {matchDetails?.match?.score?.fullTime?.homeTeam !== null && (
+                <h2
+                  className={styles.goals}
+                >{`${matchDetails?.match?.score?.fullTime?.homeTeam}`}</h2>
+              )}
             </div>
             X
             <div
               className={styles.teamScore}
               style={{ justifyContent: "flex-start" }}
             >
-              <h2
-                className={styles.goals}
-              >{`${matchDetails?.match?.score?.fullTime?.awayTeam}`}</h2>
+              {matchDetails?.match?.score?.fullTime?.awayTeam !== null && (
+                <h2
+                  className={styles.goals}
+                >{`${matchDetails?.match?.score?.fullTime?.awayTeam}`}</h2>
+              )}
               <h2>{`${matchDetails?.head2head?.awayTeam.name}`}</h2>
             </div>
           </div>
