@@ -41,7 +41,7 @@ function Match() {
       <Breadcrumb />
       <div className="container">
         {!!errorMessage && <p>Too many requests. Fetching API...</p>}
-          {!matchSelected ? (
+          {!matchSelected?.match || !competitionSelected?.name ? (
           <Loading />
         ) : (
           <div>
@@ -60,7 +60,7 @@ function Match() {
                   {matchSelected?.match.score.fullTime.homeTeam !== null && (
                     <h2
                       className={styles.goals}
-                    >{`${matchSelected?.match.score.fullTime.homeTeam}`}</h2>
+                    >{`${matchSelected?.match?.score?.fullTime?.homeTeam}`}</h2>
                   )}
                 </div>
                 X
