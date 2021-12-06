@@ -29,7 +29,7 @@ function Competition() {
           setMatchesList(json.matches);
           dispatch(updateCompetitionSelected(json.competition));
         })
-        .catch((err) => console.error(err));
+        .catch(() => setTimeout(() => fetchAPI(), 5000));
     }
     fetchAPI();
   }, [dispatch]);

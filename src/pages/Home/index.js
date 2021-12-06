@@ -7,13 +7,19 @@ function Home() {
   const [competitionsList, setCompetitionsList] = useState([]);
 
   useEffect(() => {
-    fetch("https://api.football-data.org/v2/competitions/?plan=TIER_ONE", {
-      method: "get",
-      headers: { "X-Auth-Token": process.env.REACT_APP_API_TOKEN },
-    })
-      .then((response) => response.json())
-      .then((json) => setCompetitionsList(json.competitions))
-      .catch((err) => console.error(err));
+    function fetchAPI() {
+    console.log("entrou na fetch api")
+
+      fetch("https://api.football-data.org/v2/competitions/?plan=TIER_ONE", {
+        method: "get",
+        headers: { "X-Auth-Token": process.env.REACT_APP_API_TOKEN },
+      })
+        .then((response) => response.json())
+        .then((json) => setCompetitionsList(json.competitions))
+        .catch(() => setTimeout(() => fetchAPI(), 5000));
+    }
+    console.log("depois")
+    fetchAPI();
   }, [setCompetitionsList]);
 
   return (
@@ -26,8 +32,8 @@ function Home() {
           <div className={styles.grid}>
             {competitionsList.map((competition) => {
               return (
-                <Link to={competition.code}>
-                  <div className={styles.card} key={competition.id}>
+                <Link to={competition.code} key={competition.id}>
+                  <div className={styles.card}>
                     {competition.emblemUrl || competition.area.ensignUrl ? (
                       <img
                         className={styles.img}

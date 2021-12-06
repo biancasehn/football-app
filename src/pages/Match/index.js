@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateMatchSelected } from "../../actions";
@@ -9,6 +9,8 @@ import styles from "./match.module.css";
 function Match() {
   const params = useParams();
   const matchId = params.matchId;
+
+  const [errorMessage, setErrorMessage] = useState(false);
 
   const dispatch = useDispatch();
   const competitionDetails = useSelector((state) => state.competitionSelected);
@@ -22,9 +24,15 @@ function Match() {
       })
         .then((resp) => resp.json())
         .then((json) => {
+          setErrorMessage(false)
           dispatch(updateMatchSelected(json));
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          if ((err = "TypeError: Failed to fetch")) {
+            setTimeout(() => fetchAPI(), 5000);
+            return setErrorMessage(true);
+          }
+        });
     }
     fetchAPI();
   }, [dispatch]);
@@ -33,6 +41,7 @@ function Match() {
     <div>
       <Breadcrumb />
       <div className="container">
+        {errorMessage && <p>Too many requests. Fetching API...</p>}
         {matchDetails.match === undefined ? (
           <Loading />
         ) : (
