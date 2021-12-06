@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { pick } from "ramda";
 import { updateCompetitionSelected, updateErrorMessage } from "../../actions";
+import { getMatchesList } from "../../services/api"
 import Breadcrumb from "../../components/Breadcrumb";
 import Loading from "../../components/Loading";
 import styles from "./competition.module.css";
@@ -13,51 +15,47 @@ function Competition() {
   const [matchesList, setMatchesList] = useState([]);
 
   const dispatch = useDispatch();
-  const competitionDetails = useSelector((state) => state.competitionSelected);
-  const errorMessage = useSelector((state) => state.errorMessage);
+  const { competitionSelected, errorMessage } = useSelector(
+    (state) =>
+      pick(["competitionSelected", "errorMessage"], state)
+  );
+
+
+  const loadMatchesList = async () => {
+    try {
+      const result = await getMatchesList(competitionCode);
+      dispatch(updateErrorMessage(false));
+      setMatchesList(
+        result.matches.filter((match) => match.status !== "FINISHED")
+      );
+      dispatch(updateCompetitionSelected(result.competition));
+    } catch (error) {
+      if ((error = "TypeError: Failed to fetch")) {
+        setTimeout(() => loadMatchesList(), 5000);
+        dispatch(updateErrorMessage(true));
+      }
+    }
+  }
 
   useEffect(() => {
     dispatch(updateErrorMessage(false));
-    function fetchAPI() {
-      fetch(
-        `https://api.football-data.org/v2/competitions/${competitionCode}/matches`,
-        {
-          method: "GET",
-          headers: { "X-Auth-Token": process.env.REACT_APP_API_TOKEN },
-        }
-      )
-        .then((resp) => resp.json())
-        .then((json) => {
-          dispatch(updateErrorMessage(false));
-          setMatchesList(
-            json.matches.filter((match) => match.status !== "FINISHED")
-          );
-          dispatch(updateCompetitionSelected(json.competition));
-        })
-        .catch((err) => {
-          if ((err = "TypeError: Failed to fetch")) {
-            dispatch(updateErrorMessage(true));
-            setTimeout(() => fetchAPI(), 20000);
-          }
-        });
-    }
-    fetchAPI();
-  }, [dispatch]);
+    loadMatchesList()
+  }, []);
 
   return (
     <div>
       <Breadcrumb />
       <div className="container">
-        {errorMessage === true && <p>Too many requests. Fetching API...</p>}
-        {matchesList?.length === 0 ? (
+        {!!errorMessage && <p>Too many requests. Fetching API...</p>}
+        {!matchesList?.length ? (
           <Loading />
         ) : (
           <div>
-            <h1>{competitionDetails.name}</h1>
+            <h1>{competitionSelected?.name}</h1>
             <div className="main">
               {matchesList?.map((match) => (
                 <div className={styles.listItem} key={match.id}>
-                  <Link to={`/${competitionDetails.code}/${match.id}`}>
+                  <Link to={`/${competitionSelected?.code}/${match.id}`}>
                     <div className={styles.match}>
                       {`${match.awayTeam.name} X ${match.homeTeam.name}`}
                     </div>
