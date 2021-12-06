@@ -41,7 +41,8 @@ function Match() {
       <Breadcrumb />
       <div className="container">
         {!!errorMessage && <p>Too many requests. Fetching API...</p>}
-        {matchSelected?.match === undefined ? (
+          {!matchSelected ? (
+
           <Loading />
         ) : (
           <div>
