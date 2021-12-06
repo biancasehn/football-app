@@ -42,14 +42,13 @@ function Match() {
       <div className="container">
         {!!errorMessage && <p>Too many requests. Fetching API...</p>}
           {!matchSelected ? (
-
           <Loading />
         ) : (
           <div>
             <h1>
               {competitionSelected?.name
-                ? competitionSelected.name
-                : matchSelected.match.competition.name}
+                ? competitionSelected?.name
+                : matchSelected?.match.competition.name}
             </h1>
             <div className="main">
               <div className={styles.score}>
@@ -57,11 +56,11 @@ function Match() {
                   className={styles.teamScore}
                   style={{ justifyContent: "flex-end" }}
                 >
-                  <h2>{`${matchSelected.head2head.homeTeam.name}`}</h2>
-                  {matchSelected.match.score.fullTime.homeTeam !== null && (
+                  <h2>{`${matchSelected?.head2head.homeTeam.name}`}</h2>
+                  {matchSelected?.match.score.fullTime.homeTeam !== null && (
                     <h2
                       className={styles.goals}
-                    >{`${matchSelected.match.score.fullTime.homeTeam}`}</h2>
+                    >{`${matchSelected?.match.score.fullTime.homeTeam}`}</h2>
                   )}
                 </div>
                 X
@@ -69,28 +68,28 @@ function Match() {
                   className={styles.teamScore}
                   style={{ justifyContent: "flex-start" }}
                 >
-                  {matchSelected.match.score.fullTime.awayTeam !== null && (
+                  {matchSelected?.match.score.fullTime.awayTeam !== null && (
                     <h2
                       className={styles.goals}
-                    >{`${matchSelected.match.score.fullTime.awayTeam}`}</h2>
+                    >{`${matchSelected?.match.score.fullTime.awayTeam}`}</h2>
                   )}
-                  <h2>{`${matchSelected.head2head.awayTeam.name}`}</h2>
+                  <h2>{`${matchSelected?.head2head.awayTeam.name}`}</h2>
                 </div>
               </div>
-              {matchSelected.match.status === "IN_PLAY" ? (
+              {matchSelected?.match.status === "IN_PLAY" ? (
                 <div className={styles.inPlayDetails}>
                   <h3>
-                    {matchSelected.match.score.halfTime.homeTeam === null
+                    {matchSelected?.match.score.halfTime.homeTeam === null
                       ? "First half"
                       : "Second half"}
                   </h3>
                   <h3>in Play</h3>
                 </div>
               ) : (
-                <h3>{matchSelected.match.status}</h3>
+                <h3>{matchSelected?.match.status}</h3>
               )}
               <p>
-                {String(new Date(matchSelected.match.utcDate)).slice(0, 21)}
+                {String(new Date(matchSelected?.match.utcDate)).slice(0, 21)}
               </p>
             </div>
           </div>
