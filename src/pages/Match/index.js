@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateMatchSelected } from "../../actions";
 import Breadcrumb from "../../components/Breadcrumb";
+import Loading from "../../components/Loading";
 import styles from "./match.module.css";
 
 function Match() {
@@ -22,62 +23,69 @@ function Match() {
         .then((resp) => resp.json())
         .then((json) => {
           dispatch(updateMatchSelected(json));
-          console.log(json);
         })
         .catch((err) => console.error(err));
     }
     fetchAPI();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>
       <Breadcrumb />
       <div className="container">
-        <h1>
-          {competitionDetails.name
-            ? competitionDetails.name
-            : matchDetails?.match?.competition?.name}
-        </h1>
-        <div className="main">
-          <div className={styles.score}>
-            <div
-              className={styles.teamScore}
-              style={{ justifyContent: "flex-end" }}
-            >
-              <h2>{`${matchDetails?.head2head?.homeTeam.name}`}</h2>
-              {matchDetails?.match?.score?.fullTime?.homeTeam !== null && (
-                <h2
-                  className={styles.goals}
-                >{`${matchDetails?.match?.score?.fullTime?.homeTeam}`}</h2>
+        {matchDetails.match === undefined ? (
+          <Loading />
+        ) : (
+          <div>
+            <h1>
+              {competitionDetails.name
+                ? competitionDetails.name
+                : matchDetails?.match?.competition?.name}
+            </h1>
+            <div className="main">
+              <div className={styles.score}>
+                <div
+                  className={styles.teamScore}
+                  style={{ justifyContent: "flex-end" }}
+                >
+                  <h2>{`${matchDetails?.head2head?.homeTeam.name}`}</h2>
+                  {matchDetails?.match?.score?.fullTime?.homeTeam !== null && (
+                    <h2
+                      className={styles.goals}
+                    >{`${matchDetails?.match?.score?.fullTime?.homeTeam}`}</h2>
+                  )}
+                </div>
+                X
+                <div
+                  className={styles.teamScore}
+                  style={{ justifyContent: "flex-start" }}
+                >
+                  {matchDetails?.match?.score?.fullTime?.awayTeam !== null && (
+                    <h2
+                      className={styles.goals}
+                    >{`${matchDetails?.match?.score?.fullTime?.awayTeam}`}</h2>
+                  )}
+                  <h2>{`${matchDetails?.head2head?.awayTeam.name}`}</h2>
+                </div>
+              </div>
+              {matchDetails?.match?.status === "IN_PLAY" ? (
+                <div className={styles.inPlayDetails}>
+                  <h3>
+                    {matchDetails?.match?.score.halfTime.homeTeam === null
+                      ? "First half"
+                      : "Second half"}
+                  </h3>
+                  <h3>in Play</h3>
+                </div>
+              ) : (
+                <h3>{matchDetails?.match?.status}</h3>
               )}
-            </div>
-            X
-            <div
-              className={styles.teamScore}
-              style={{ justifyContent: "flex-start" }}
-            >
-              {matchDetails?.match?.score?.fullTime?.awayTeam !== null && (
-                <h2
-                  className={styles.goals}
-                >{`${matchDetails?.match?.score?.fullTime?.awayTeam}`}</h2>
-              )}
-              <h2>{`${matchDetails?.head2head?.awayTeam.name}`}</h2>
+              <p>
+                {String(new Date(matchDetails?.match?.utcDate)).slice(0, 21)}
+              </p>
             </div>
           </div>
-          {matchDetails?.match?.status === "IN_PLAY" ? (
-            <div className={styles.inPlayDetails}>
-              <h3>
-                {matchDetails?.match?.score.halfTime.homeTeam === null
-                    ? "First half"
-                    : "Second half"}
-              </h3>
-              <h3>in Play</h3>
-            </div>
-          ) : (
-            <h3>{matchDetails?.match?.status}</h3>
-          )}
-          <p>{String(new Date(matchDetails?.match?.utcDate)).slice(0, 21)}</p>
-        </div>
+        )}
       </div>
     </div>
   );

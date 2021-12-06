@@ -19,7 +19,9 @@ function Home() {
   return (
     <div className="container">
       <h1>Football Competitions</h1>
-      {competitionsList.length === 0 ? <Loading /> : (
+      {competitionsList.length === 0 ? (
+        <Loading />
+      ) : (
         <div className="main">
           <div className={styles.grid}>
             {competitionsList.map((competition) => {
