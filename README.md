@@ -1,5 +1,5 @@
 # Football app :soccer:
-[Go to the app](https://football-application-test.herokuapp.com/) </br>
+[Go to the app](https://football-application-test.herokuapp.com/) :arrow_upper_right:
 
 ## Requirements
 * node version 14+
