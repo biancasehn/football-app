@@ -15,13 +15,17 @@ function Breadcrumb() {
 
   return (
     <div className={styles.breadcrumb}>
-      <Link to="/"><span className={styles.link}>Home</span></Link>
+      <Link to="/">
+        <span className={styles.link}>Home</span>
+      </Link>
       <span> > </span>
       {matchId === undefined ? (
         <span className={styles.nonLink}>League</span>
       ) : (
         <>
-          <Link to={`/${competitionCode}`}><span className={styles.link}>League</span></Link>
+          <Link to={`/${competitionCode}`}>
+            <span className={styles.link}>League</span>
+          </Link>
           <span> > </span>
           <span className={styles.nonLink}>Match</span>
         </>

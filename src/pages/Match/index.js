@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { pick } from "ramda";
 import { updateMatchSelected, updateErrorMessage } from "../../actions";
-import { getMatch } from "../../services/api"
+import { getMatch } from "../../services/api";
 import Breadcrumb from "../../components/Breadcrumb";
 import Loading from "../../components/Loading";
 import styles from "./match.module.css";
@@ -19,6 +19,7 @@ function Match() {
   );
 
   const loadMatch = async () => {
+    dispatch(updateErrorMessage(false));
     try {
       const result = await getMatch(matchId);
       dispatch(updateErrorMessage(false));
@@ -29,11 +30,10 @@ function Match() {
         dispatch(updateErrorMessage(true));
       }
     }
-  }
+  };
 
   useEffect(() => {
-    dispatch(updateErrorMessage(false));
-    loadMatch()
+    loadMatch();
   }, []);
 
   return (
@@ -41,7 +41,7 @@ function Match() {
       <Breadcrumb />
       <div className="container">
         {!!errorMessage && <p>Too many requests. Fetching API...</p>}
-          {!matchSelected?.match || !competitionSelected?.name ? (
+        {!matchSelected?.match ? (
           <Loading />
         ) : (
           <div>

@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { pick } from "ramda";
 import { updateCompetitionSelected, updateErrorMessage } from "../../actions";
-import { getMatchesList } from "../../services/api"
+import { getMatchesList } from "../../services/api";
 import Breadcrumb from "../../components/Breadcrumb";
 import Loading from "../../components/Loading";
 import styles from "./competition.module.css";
@@ -15,11 +15,9 @@ function Competition() {
   const [matchesList, setMatchesList] = useState([]);
 
   const dispatch = useDispatch();
-  const { competitionSelected, errorMessage } = useSelector(
-    (state) =>
-      pick(["competitionSelected", "errorMessage"], state)
+  const { competitionSelected, errorMessage } = useSelector((state) =>
+    pick(["competitionSelected", "errorMessage"], state)
   );
-
 
   const loadMatchesList = async () => {
     try {
@@ -35,11 +33,11 @@ function Competition() {
         dispatch(updateErrorMessage(true));
       }
     }
-  }
+  };
 
   useEffect(() => {
     dispatch(updateErrorMessage(false));
-    loadMatchesList()
+    loadMatchesList();
   }, []);
 
   return (

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateErrorMessage } from "../../actions";
-import { getCompetitions } from "../../services/api"
+import { getCompetitions } from "../../services/api";
 import Loading from "../../components/Loading";
 import styles from "./home.module.css";
 
@@ -23,11 +23,11 @@ function Home() {
         dispatch(updateErrorMessage(true));
       }
     }
-  }
+  };
 
   useEffect(() => {
     dispatch(updateErrorMessage(false));
-    loadCompetitions()
+    loadCompetitions();
   }, []);
 
   return (
