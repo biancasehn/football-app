@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { pick } from "ramda";
-import { updateCompetitionSelected, updateErrorMessage } from "../../actions";
+import { updateCompetitionSelected, updateMatchSelected, updateErrorMessage } from "../../actions";
 import { getMatchesList } from "../../services/api";
 import Breadcrumb from "../../components/Breadcrumb";
 import Loading from "../../components/Loading";
@@ -37,6 +37,7 @@ function Competition() {
 
   useEffect(() => {
     dispatch(updateErrorMessage(false));
+    dispatch(updateMatchSelected([]));
     loadMatchesList();
   }, []);
 
