@@ -19,7 +19,7 @@ function Breadcrumb() {
   //   setCompetitionCode(params.competitionCode);
   //   setMatchId(params.matchId);
   // }, [params]);
-  console.log(matchSelected)
+  
   return (
     <div className={styles.breadcrumb}>
       <Link to="/">
